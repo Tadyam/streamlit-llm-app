@@ -5,6 +5,7 @@ import streamlit as st
 from langchain_openai import ChatOpenAI
 from langchain.schema import SystemMessage, HumanMessage
 
+# OpenAI APIの設定
 llm = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
 
 # Streamlitアプリケーションの設定
@@ -26,13 +27,16 @@ def handle_question(question_type):
     if st.button("実行"):
         st.write(f"あなたの質問: {question}")
         
-        # LLMを使用してアドバイスを生成
+        # OpenAI APIを使用してアドバイスを生成
         messages = [
             SystemMessage(content=f"あなたはランニングの専門家です。以下の質問に対して専門的なアドバイスを提供してください。"),
             HumanMessage(content=f"質問タイプ: {question_type}\n質問内容: {question}")
         ]
-        response = llm(messages)
-        st.write(f"専門家からのアドバイス: {response.content}")
+        try:
+            response = llm(messages)
+            st.write(f"専門家からのアドバイス: {response.content}")
+        except Exception as e:
+            st.error(f"エラーが発生しました: {e}")
 
 # 質問タイプごとの処理
 if selected_questions:
