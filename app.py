@@ -4,6 +4,7 @@ load_dotenv()
 import streamlit as st
 from langchain_openai import ChatOpenAI
 from langchain.schema import SystemMessage, HumanMessage
+import os
 
 # OpenAI APIの設定
 llm = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
@@ -19,6 +20,13 @@ selected_questions = st.radio(
 )
 
 st.divider()
+
+# 環境変数の確認
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    st.error("OPENAI_API_KEYが設定されていません。")
+else:
+    st.write("APIキーが正常に読み込まれました。")
 
 # 質問ごとのアドバイスを提供する関数
 def handle_question(question_type):
